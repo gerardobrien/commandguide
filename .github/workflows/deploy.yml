@@ -1,0 +1,85 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Preview the changes without touching the server
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+# Never run two deploys at once.
+concurrency:
+  group: production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    # Pushes stay switched off until the DEPLOY_ENABLED variable is "true".
+    # Manual runs always work, so the dry run can happen first.
+    if: github.event_name == 'workflow_dispatch' || vars.DEPLOY_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      DRY_RUN: ${{ inputs.dry_run && 'true' || 'false' }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+
+      - name: Set up SSH
+        env:
+          SSH_KEY: ${{ secrets.HOSTINGER_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.HOSTINGER_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+
+      - name: Sync files
+        env:
+          HOST: ${{ secrets.HOSTINGER_SSH_HOST }}
+          PORT: ${{ secrets.HOSTINGER_SSH_PORT }}
+          SSH_USER: ${{ secrets.HOSTINGER_SSH_USER }}
+          DEPLOY_PATH: ${{ secrets.HOSTINGER_DEPLOY_PATH }}
+        run: |
+          # --delete removes server files, so refuse anything but the site root.
+          case "$DEPLOY_PATH" in
+            /home/*/domains/commandguide.com/public_html) ;;
+            *) echo "::error::HOSTINGER_DEPLOY_PATH is not the commandguide.com site root"; exit 1 ;;
+          esac
+          flags=(-rlptvz --delete --exclude=.well-known/ --itemize-changes)
+          if [ "$DRY_RUN" = "true" ]; then flags+=(--dry-run); fi
+          rsync "${flags[@]}" \
+            -e "ssh -i $HOME/.ssh/deploy_key -p $PORT -o BatchMode=yes -o StrictHostKeyChecking=yes" \
+            dist/ "$SSH_USER@$HOST:$DEPLOY_PATH/"
+
+      - name: Confirm the live site is running this commit
+        if: env.DRY_RUN == 'false'
+        run: |
+          for attempt in 1 2 3 4 5 6; do
+            live=$(curl -fsS "https://commandguide.com/version.txt?check=$GITHUB_RUN_ID-$attempt" || true)
+            if [ "$live" = "$GITHUB_SHA" ]; then
+              curl -fsS -o /dev/null https://commandguide.com/
+              echo "Live site is running $GITHUB_SHA"
+              exit 0
+            fi
+            echo "Attempt $attempt: live version is '${live:-unavailable}'"
+            sleep 10
+          done
+          echo "::error::commandguide.com is not serving $GITHUB_SHA"
+          exit 1
+
+      - name: Remove the SSH key
+        if: always()
+        run: rm -f ~/.ssh/deploy_key

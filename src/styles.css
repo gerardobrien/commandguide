@@ -1,0 +1,83 @@
+:root {
+  --paper: #dfe9ee;
+  --sheet: #f3f7f9;
+  --ink: #14263d;
+  --muted: #4b5f75;
+  --rule: #b4c6d1;
+  --marker: #ffdc4a;
+  --focus: #0b5fff;
+  --sans: "Bricolage Grotesque", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #14263d;
+    --sheet: #1b3049;
+    --ink: #eaf1f5;
+    --muted: #a9bccb;
+    --rule: #38506b;
+    --focus: #8ab4ff;
+  }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 1.0625rem/1.5 var(--sans);
+}
+.wrap { max-width: 60rem; margin: 0 auto; padding: 0 1rem; }
+header { padding: clamp(2.5rem, 8vw, 6rem) 0 2rem; }
+label[for="q"] {
+  display: block;
+  font-size: clamp(2.5rem, 8.5vw, 5.25rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -.03em;
+  margin-bottom: 1.5rem;
+}
+#q {
+  width: 100%;
+  padding: .85rem 1rem;
+  border: 3px solid var(--ink);
+  border-radius: 0;
+  background: var(--sheet);
+  color: var(--ink);
+  font: 500 1.25rem var(--mono);
+}
+#q::placeholder { color: var(--muted); opacity: 1; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+#status { margin: .75rem 0 0; color: var(--muted); min-height: 1.5em; }
+section { margin-bottom: 2.5rem; }
+h2 { font-size: 1.625rem; font-weight: 800; margin: 0 0 .5rem; }
+ul { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--ink); }
+li {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr) auto;
+  gap: .25rem 1.25rem;
+  align-items: center;
+  padding: .7rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+code { font: 500 .9375rem/1.45 var(--mono); overflow-wrap: anywhere; }
+mark { background: var(--marker); color: #14263d; padding: 0 .05em; }
+button {
+  min-width: 4.5rem;
+  min-height: 2.5rem;
+  padding: 0 .75rem;
+  border: 2px solid var(--ink);
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  font: 400 .9375rem var(--sans);
+  cursor: pointer;
+}
+button:hover { background: var(--ink); color: var(--paper); }
+[hidden] { display: none !important; }
+footer { padding: 1rem 0 3rem; color: var(--muted); font-size: .9375rem; }
+a { color: inherit; }
+@media (max-width: 40rem) {
+  li { grid-template-columns: minmax(0, 1fr) auto; }
+  li > span { grid-column: 1 / -1; font-weight: 800; }
+}
