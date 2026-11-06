@@ -29,8 +29,9 @@ body {
 }
 .wrap { max-width: 60rem; margin: 0 auto; padding: 0 1rem; }
 header { padding: clamp(2.5rem, 8vw, 6rem) 0 2rem; }
-label[for="q"] {
+.ask {
   display: block;
+  margin-top: 0;
   font-size: clamp(2.5rem, 8.5vw, 5.25rem);
   font-weight: 800;
   line-height: 1;
@@ -49,10 +50,20 @@ label[for="q"] {
 #q::placeholder { color: var(--muted); opacity: 1; }
 :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 #status { margin: .75rem 0 0; color: var(--muted); min-height: 1.5em; }
+nav { display: flex; flex-wrap: wrap; gap: .25rem 1.25rem; padding-top: 1rem; }
+nav a { padding: .35rem 0; text-underline-offset: .2em; }
+nav a[aria-current="page"] { font-weight: 800; text-decoration: none; }
+.guide-list { border-top: 2px solid var(--ink); margin-bottom: 2.5rem; }
+.guide-list a { display: block; padding: 1rem 0; border-bottom: 1px solid var(--rule); text-decoration: none; }
+.guide-list span { display: block; font-size: 1.625rem; font-weight: 800; line-height: 1.2; }
+.guide-list a:hover span { text-decoration: underline; }
+.guide-list small { display: block; color: var(--muted); font-size: 1rem; }
+.commands small { display: block; color: var(--muted); font-size: .875rem; }
+.warning { display: block; font-size: .9375rem; margin-top: .25rem; }
 section { margin-bottom: 2.5rem; }
 h2 { font-size: 1.625rem; font-weight: 800; margin: 0 0 .5rem; }
-ul { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--ink); }
-li {
+.commands { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--ink); }
+.commands > li {
   display: grid;
   grid-template-columns: minmax(0, 2fr) minmax(0, 3fr) auto;
   gap: .25rem 1.25rem;
@@ -78,6 +89,7 @@ button:hover { background: var(--ink); color: var(--paper); }
 footer { padding: 1rem 0 3rem; color: var(--muted); font-size: .9375rem; }
 a { color: inherit; }
 @media (max-width: 40rem) {
-  li { grid-template-columns: minmax(0, 1fr) auto; }
-  li > span { grid-column: 1 / -1; font-weight: 800; }
+  .commands > li { grid-template-columns: minmax(0, 1fr) auto; }
+  .commands > li > div { grid-column: 1 / -1; }
+  .commands .task { font-weight: 800; }
 }

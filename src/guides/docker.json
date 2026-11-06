@@ -1,0 +1,48 @@
+{
+  "slug": "docker",
+  "title": "Docker commands",
+  "description": "Docker commands for listing containers, reading logs, opening a shell and starting Compose stacks.",
+  "groups": [
+    {
+      "group": "Docker",
+      "items": [
+        {
+          "task": "List running containers",
+          "cmd": "docker ps",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Follow a container's logs",
+          "cmd": "docker logs -f my-container",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Open a shell inside a container",
+          "cmd": "docker exec -it my-container sh",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Start a Compose stack in the background",
+          "cmd": "docker compose up -d",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        }
+      ]
+    }
+  ]
+}
