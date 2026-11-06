@@ -1,0 +1,202 @@
+{
+  "slug": "linux",
+  "title": "Linux commands",
+  "description": "Linux terminal commands for files, text, networking, SSH and processes, with notes on what also works on macOS.",
+  "groups": [
+    {
+      "group": "Files",
+      "items": [
+        {
+          "task": "Find files by name",
+          "cmd": "find . -name \"*.log\"",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "See what is using disk space",
+          "cmd": "du -sh * | sort -h",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Check free disk space",
+          "cmd": "df -h",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Compress a folder",
+          "cmd": "tar -czf backup.tar.gz folder/",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Extract a .tar.gz archive",
+          "cmd": "tar -xzf backup.tar.gz",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Follow a log file as it grows",
+          "cmd": "tail -f app.log",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Text",
+      "items": [
+        {
+          "task": "Search for text in a folder",
+          "cmd": "grep -rn \"error\" .",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Replace text in a file",
+          "cmd": "sed -i 's/old/new/g' file.txt",
+          "platforms": [
+            "linux"
+          ]
+        },
+        {
+          "task": "Count lines in a file",
+          "cmd": "wc -l file.txt",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Network",
+      "items": [
+        {
+          "task": "List listening ports",
+          "cmd": "ss -tulpn",
+          "platforms": [
+            "linux"
+          ]
+        },
+        {
+          "task": "Look up a domain's IP address",
+          "cmd": "dig +short example.com",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "See only the response headers from a site",
+          "cmd": "curl -I https://example.com",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Test whether a port is open",
+          "cmd": "nc -zv example.com 443",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Show this machine's IP addresses",
+          "cmd": "ip -br addr",
+          "platforms": [
+            "linux"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "SSH",
+      "items": [
+        {
+          "task": "Create a new SSH key",
+          "cmd": "ssh-keygen -t ed25519 -C \"label\"",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Connect on a custom port",
+          "cmd": "ssh -p 2222 user@host",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Copy your key to a server",
+          "cmd": "ssh-copy-id user@host",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Sync a folder to a server",
+          "cmd": "rsync -avz dist/ user@host:/var/www/site/",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Processes",
+      "items": [
+        {
+          "task": "Find a process by name",
+          "cmd": "pgrep -a nginx",
+          "platforms": [
+            "linux"
+          ]
+        },
+        {
+          "task": "Stop a process by ID",
+          "cmd": "kill 1234",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Check a service's status",
+          "cmd": "systemctl status nginx",
+          "platforms": [
+            "linux"
+          ]
+        },
+        {
+          "task": "Read a service's recent logs",
+          "cmd": "journalctl -u nginx -n 50",
+          "platforms": [
+            "linux"
+          ]
+        }
+      ]
+    }
+  ]
+}

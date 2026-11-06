@@ -1,6 +1,8 @@
 const input = document.getElementById("q");
 const status = document.getElementById("status");
-const rows = [...document.querySelectorAll("li")];
+const guideList = document.getElementById("guides");
+const results = document.getElementById("results");
+const rows = [...document.querySelectorAll("li[data-cmd]")];
 const sections = [...document.querySelectorAll("section")];
 
 function paint(el, source, terms) {
@@ -29,9 +31,9 @@ function filter() {
   const terms = input.value.trim().toLowerCase().split(/\s+/).filter(Boolean);
   let shown = 0;
   for (const row of rows) {
-    const task = row.querySelector("span");
+    const task = row.querySelector(".task");
     const cmd = row.querySelector("code");
-    const text = `${row.dataset.task} ${row.dataset.cmd}`.toLowerCase();
+    const text = `${row.dataset.task} ${row.dataset.cmd} ${row.dataset.platforms}`.toLowerCase();
     const match = terms.every((term) => text.includes(term));
     row.hidden = !match;
     if (match) {
@@ -43,6 +45,10 @@ function filter() {
   for (const section of sections) {
     section.hidden = !section.querySelector("li:not([hidden])");
   }
+  if (guideList) {
+    guideList.hidden = terms.length > 0;
+    results.hidden = terms.length === 0;
+  }
   status.textContent = !terms.length
     ? `${rows.length} commands`
     : shown
@@ -53,7 +59,7 @@ function filter() {
 document.addEventListener("click", async (event) => {
   const button = event.target.closest("button");
   if (!button) return;
-  const cmd = button.closest("li").dataset.cmd;
+  const cmd = button.closest("li[data-cmd]").dataset.cmd;
   try {
     await navigator.clipboard.writeText(cmd);
     button.textContent = "Copied";

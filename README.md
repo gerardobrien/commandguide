@@ -9,7 +9,9 @@ A searchable command cheat sheet, used to test a Claude → GitHub → Hostinger
 3. Merge to `main`.
 4. The Deploy workflow rebuilds, syncs `dist/` to Hostinger with rsync, then confirms `version.txt` on the live site matches the commit.
 
-To add a command, edit `src/commands.json`.
+To add a command, edit the guide's file in `src/guides/`. Each command needs a `task`, a `cmd` and `platforms`, and can have a `warning` for anything destructive.
+
+To add a guide, create `src/guides/<slug>.json` and add the slug to `src/guide-order.json`. The build creates its page, navigation link and sitemap entry.
 
 ## Run it locally
 

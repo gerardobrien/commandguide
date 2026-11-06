@@ -6,7 +6,7 @@
   "engines": { "node": ">=22" },
   "scripts": {
     "build": "node scripts/build.mjs",
-    "check": "html-validate dist/index.html dist/404.html && node scripts/check.mjs",
+    "check": "html-validate \"dist/**/*.html\" && node scripts/check.mjs",
     "test": "npm run build && npm run check"
   },
   "devDependencies": { "html-validate": "11.18.0" }
