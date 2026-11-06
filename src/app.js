@@ -5,8 +5,9 @@ const guideList = document.getElementById("guides");
 const results = document.getElementById("results");
 const tryRow = document.getElementById("try");
 const rows = [...document.querySelectorAll("li.cmd")];
+const variants = [...document.querySelectorAll(".variant")];
 const sections = [...document.querySelectorAll("section")];
-const STOP_WORDS = new Set(["a", "an", "the", "my", "to", "i", "want", "how", "do", "of", "in", "on", "for", "is", "learn", "know", "understand", "help", "me", "about", "please", "need", "would", "like", "can", "some", "show", "commands", "command"]);
+const STOP_WORDS = new Set(["a", "an", "the", "my", "to", "i", "want", "how", "do", "of", "in", "on", "for", "is", "learn", "know", "understand", "help", "me", "about", "please", "need", "would", "like", "can", "some", "show", "commands", "command", "with", "using", "from", "and"]);
 
 function paint(el, source, terms) {
   el.textContent = "";
@@ -35,19 +36,25 @@ function filter() {
   const words = typed.toLowerCase().split(/\s+/).filter(Boolean);
   const meaningful = words.filter((word) => !STOP_WORDS.has(word));
   const terms = meaningful.length ? meaningful : words;
-  const textOf = (row) => `${row.dataset.task} ${row.dataset.cmd} ${row.dataset.platforms}`.toLowerCase();
+  const all = (variant) => terms.every((term) => variant.dataset.search.toLowerCase().includes(term));
+  const any = (variant) => terms.some((term) => variant.dataset.search.toLowerCase().includes(term));
   // Prefer commands matching every word. If there are none, show any that match a word.
-  const exact = rows.some((row) => terms.every((term) => textOf(row).includes(term)));
+  const exact = variants.some(all);
+  const matches = exact ? all : any;
   let shown = 0;
   for (const row of rows) {
-    const text = textOf(row);
-    const match = exact ? terms.every((term) => text.includes(term)) : terms.some((term) => text.includes(term));
-    row.hidden = !match;
-    if (match) {
-      shown += 1;
-      paint(row.querySelector(".task"), row.dataset.task, terms);
-      paint(row.querySelector("code"), row.dataset.cmd, terms);
+    let rowShown = false;
+    for (const variant of row.querySelectorAll(".variant")) {
+      const match = matches(variant);
+      variant.hidden = !match;
+      if (match) {
+        shown += 1;
+        rowShown = true;
+        paint(variant.querySelector("code"), variant.dataset.cmd, terms);
+      }
     }
+    row.hidden = !rowShown;
+    if (rowShown) paint(row.querySelector(".task"), row.dataset.task, terms);
   }
   for (const section of sections) {
     const visible = Boolean(section.querySelector("li.cmd:not([hidden])"));
@@ -62,8 +69,8 @@ function filter() {
     results.hidden = !active;
     tryRow.hidden = active;
   }
-  if (!active) status.textContent = guideList ? "" : `${rows.length} commands`;
-  else if (shown && exact) status.textContent = `${shown} of ${rows.length} commands`;
+  if (!active) status.textContent = guideList ? "" : `${variants.length} commands`;
+  else if (shown && exact) status.textContent = `${shown} of ${variants.length} commands`;
   else if (shown) status.textContent = `No exact match. Showing ${shown} commands that match some of your words.`;
   else status.textContent = "No commands match. Try one word, like “port” or “branch”.";
 }
@@ -78,7 +85,7 @@ document.addEventListener("click", async (event) => {
   }
   const button = event.target.closest(".cmd button");
   if (!button) return;
-  const cmd = button.closest("li.cmd").dataset.cmd;
+  const cmd = button.closest(".variant").dataset.cmd;
   try {
     await navigator.clipboard.writeText(cmd);
     button.textContent = "Copied";

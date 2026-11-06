@@ -3,6 +3,7 @@ import { access, readFile, readdir } from "node:fs/promises";
 
 const errors = [];
 const PLATFORMS = new Set(["linux", "macos", "windows", "cisco"]);
+const DISTROS = new Set(["debian", "redhat", "alpine"]);
 const TONES = new Set(["amber", "coral", "sky", "mint", "violet"]);
 const order = JSON.parse(await readFile("src/guide-order.json", "utf8"));
 const files = (await readdir("src/guides")).map((f) => f.replace(/\.json$/, ""));
@@ -17,11 +18,16 @@ for (const slug of order) {
   const seen = new Set();
   for (const { group, items } of guide.groups) {
     if (!group || !items?.length) errors.push(`${slug}: empty or unnamed group`);
-    for (const { task, cmd, platforms, warning } of items) {
+    for (const { task, cmd, platforms, distros, warning } of items) {
       total += 1;
       if (!task || !cmd) errors.push(`${slug}/${group}: command missing task or cmd`);
-      if (seen.has(task)) errors.push(`${slug}: duplicate task "${task}"`);
-      seen.add(task);
+      const key = `${task}|${(distros ?? []).join(",")}`;
+      if (seen.has(key)) errors.push(`${slug}: duplicate task "${task}"`);
+      seen.add(key);
+      if (distros !== undefined) {
+        if (!distros.length || distros.some((d) => !DISTROS.has(d))) errors.push(`${slug}: "${task}" has invalid distros`);
+        if (platforms?.join() !== "linux") errors.push(`${slug}: "${task}" has distros, so its platforms must be ["linux"]`);
+      }
       if (!platforms?.length || platforms.some((p) => !PLATFORMS.has(p))) errors.push(`${slug}: "${task}" has invalid platforms`);
       if (warning !== undefined && !warning.trim()) errors.push(`${slug}: "${task}" has an empty warning`);
     }

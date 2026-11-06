@@ -196,7 +196,10 @@ code {
 .cmd button:hover { background: var(--cobalt); color: #fff; }
 .cmd button.is-copied { background: var(--marker); color: #0d1147; }
 mark { background: var(--marker); color: #0d1147; }
+.variant + .variant { margin-top: .75rem; }
+.cmd .variant-label { display: block; margin-bottom: .3rem; color: var(--ink); font-weight: 600; }
 .warning { margin: .6rem 0 0; font-weight: 600; }
+.guide-note { margin: 1.5rem 0 0; max-width: 62ch; color: var(--muted); }
 
 /* Guide pages: section list beside the commands on wide screens. */
 .toc { display: flex; flex-wrap: wrap; gap: 0 1.25rem; padding-top: 1.5rem; }
@@ -208,7 +211,7 @@ mark { background: var(--marker); color: #0d1147; }
   .guide-layout { display: grid; grid-template-columns: 11rem minmax(0, 1fr); gap: 4rem; align-items: start; }
   .toc { position: sticky; top: 0; display: block; padding-top: 3rem; }
   .toc a { justify-content: space-between; }
-  .guide-layout main > section:first-child { margin-top: 3rem; }
+  .guide-layout main > section:first-child, .guide-note { margin-top: 3rem; }
 }
 
 .site-footer { border-top: 1px solid var(--rule); color: var(--muted); }
