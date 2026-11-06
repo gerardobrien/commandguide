@@ -1,11 +1,139 @@
 {
   "slug": "git",
   "title": "Git commands",
-  "description": "Git commands for branches, commits, pushing changes, undoing mistakes and viewing history.",
+  "description": "Git commands for setting up, committing, branching, merging, working with GitHub, undoing mistakes and searching history.",
   "tone": "coral",
+  "note": "Replace abc1234 with a commit ID, which you can find with git log --oneline. Branch, file and repository names are examples too.",
   "groups": [
     {
-      "group": "Git",
+      "group": "Setup",
+      "items": [
+        {
+          "task": "Check which version of Git is installed",
+          "cmd": "git --version",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Set the name on your commits",
+          "cmd": "git config --global user.name \"Your Name\"",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Set the email on your commits",
+          "cmd": "git config --global user.email \"you@example.com\"",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Name the first branch main in new repositories",
+          "cmd": "git config --global init.defaultBranch main",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Use VS Code to write commit messages",
+          "cmd": "git config --global core.editor \"code --wait\"",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Rebase instead of merge when you pull",
+          "cmd": "git config --global pull.rebase true",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Create a shortcut, so git st runs git status",
+          "cmd": "git config --global alias.st status",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Show all your settings and where they come from",
+          "cmd": "git config --list --show-origin",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Start a repository",
+      "items": [
+        {
+          "task": "Turn the current folder into a repository",
+          "cmd": "git init",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Copy a repository to your computer",
+          "cmd": "git clone https://github.com/user/repo.git",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Copy a repository into a folder with a different name",
+          "cmd": "git clone https://github.com/user/repo.git my-folder",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Copy only the latest version of a repository",
+          "cmd": "git clone --depth 1 https://github.com/user/repo.git",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Copy a repository and switch to a specific branch",
+          "cmd": "git clone --branch develop https://github.com/user/repo.git",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "See what has changed",
       "items": [
         {
           "task": "See what has changed",
@@ -17,8 +145,94 @@
           ]
         },
         {
-          "task": "Create a branch and switch to it",
-          "cmd": "git switch -c my-branch",
+          "task": "See what has changed, in short form",
+          "cmd": "git status -s",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Show changes you haven't staged yet",
+          "cmd": "git diff",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Show changes that are staged for the next commit",
+          "cmd": "git diff --staged",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "List only the names of changed files",
+          "cmd": "git diff --name-only",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Compare two branches",
+          "cmd": "git diff main..my-branch",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Show what a commit changed",
+          "cmd": "git show abc1234",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Show a file as it was in an earlier commit",
+          "cmd": "git show abc1234:path/to/file.txt",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Stage and commit",
+      "items": [
+        {
+          "task": "Stage a file for the next commit",
+          "cmd": "git add file.txt",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Stage every change, including new and deleted files",
+          "cmd": "git add -A",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Choose which parts of a file to stage",
+          "cmd": "git add -p",
           "platforms": [
             "linux",
             "macos",
@@ -35,8 +249,37 @@
           ]
         },
         {
-          "task": "Push a new branch to GitHub",
-          "cmd": "git push -u origin my-branch",
+          "task": "Stage changes to tracked files and commit in one step",
+          "cmd": "git commit -am \"Describe the change\"",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Add staged changes to the last commit",
+          "cmd": "git commit --amend --no-edit",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ],
+          "warning": "Rewrites history. Don't use it on commits you've already pushed and shared."
+        },
+        {
+          "task": "Change the last commit message",
+          "cmd": "git commit --amend -m \"New message\"",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ],
+          "warning": "Rewrites history. Don't use it on commits you've already pushed and shared."
+        },
+        {
+          "task": "Make an empty commit, for example to rerun a workflow",
+          "cmd": "git commit --allow-empty -m \"Rerun checks\"",
           "platforms": [
             "linux",
             "macos",
@@ -53,6 +296,383 @@
           ]
         },
         {
+          "task": "Stop tracking a file but keep it on disk",
+          "cmd": "git rm --cached file.txt",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Delete a file and stage the deletion",
+          "cmd": "git rm file.txt",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Rename a file and stage the rename",
+          "cmd": "git mv old-name.txt new-name.txt",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Branches",
+      "items": [
+        {
+          "task": "List your branches",
+          "cmd": "git branch",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "List every branch, including ones on GitHub",
+          "cmd": "git branch -a",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Show the latest commit on each branch",
+          "cmd": "git branch -v",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Create a branch and switch to it",
+          "cmd": "git switch -c my-branch",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Switch to an existing branch",
+          "cmd": "git switch main",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Switch back to the previous branch",
+          "cmd": "git switch -",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Rename the current branch",
+          "cmd": "git branch -m new-name",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "List branches already merged into main",
+          "cmd": "git branch --merged main",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Delete a branch that has been merged",
+          "cmd": "git branch -d my-branch",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Delete a branch even if it isn't merged",
+          "cmd": "git branch -D my-branch",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ],
+          "warning": "Any commits only on that branch will be lost."
+        },
+        {
+          "task": "Delete a branch on GitHub",
+          "cmd": "git push origin --delete my-branch",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Merge and rebase",
+      "items": [
+        {
+          "task": "Merge a branch into the current branch",
+          "cmd": "git merge my-branch",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Merge and always create a merge commit",
+          "cmd": "git merge --no-ff my-branch",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Combine a branch's changes into one commit",
+          "cmd": "git merge --squash my-branch",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "List files with merge conflicts",
+          "cmd": "git diff --name-only --diff-filter=U",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Mark a conflict as fixed",
+          "cmd": "git add file.txt",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Cancel a merge that has conflicts",
+          "cmd": "git merge --abort",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Move your branch on top of the latest main",
+          "cmd": "git rebase main",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ],
+          "warning": "Rewrites history. Don't use it on commits you've already pushed and shared."
+        },
+        {
+          "task": "Continue a rebase after fixing conflicts",
+          "cmd": "git rebase --continue",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Cancel a rebase",
+          "cmd": "git rebase --abort",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Tidy up or combine the last 3 commits",
+          "cmd": "git rebase -i HEAD~3",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ],
+          "warning": "Rewrites history. Don't use it on commits you've already pushed and shared."
+        },
+        {
+          "task": "Copy one commit onto the current branch",
+          "cmd": "git cherry-pick abc1234",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Work with GitHub",
+      "items": [
+        {
+          "task": "List the remote repositories you're connected to",
+          "cmd": "git remote -v",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Connect a repository to GitHub",
+          "cmd": "git remote add origin https://github.com/user/repo.git",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Change the GitHub address of a repository",
+          "cmd": "git remote set-url origin git@github.com:user/repo.git",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Download new changes without applying them",
+          "cmd": "git fetch",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Download changes and forget branches deleted on GitHub",
+          "cmd": "git fetch --prune",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Get the latest changes for your branch",
+          "cmd": "git pull",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Get the latest changes and put yours on top",
+          "cmd": "git pull --rebase",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Push your commits to GitHub",
+          "cmd": "git push",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Push a new branch to GitHub",
+          "cmd": "git push -u origin my-branch",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Check out a branch someone else pushed",
+          "cmd": "git switch their-branch",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "List commits on your branch that aren't on main yet",
+          "cmd": "git log --oneline origin/main..HEAD",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Overwrite the branch on GitHub with yours",
+          "cmd": "git push --force-with-lease",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ],
+          "warning": "Replaces commits on GitHub. Only use it on your own branches."
+        }
+      ]
+    },
+    {
+      "group": "Undo changes",
+      "items": [
+        {
+          "task": "Throw away changes to a file",
+          "cmd": "git restore file.txt",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ],
+          "warning": "Uncommitted changes to the file are lost."
+        },
+        {
+          "task": "Throw away all uncommitted changes",
+          "cmd": "git restore .",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ],
+          "warning": "Uncommitted changes are lost. New files you haven't staged are kept."
+        },
+        {
           "task": "Undo the last commit but keep the changes",
           "cmd": "git reset --soft HEAD~1",
           "platforms": [
@@ -62,8 +682,446 @@
           ]
         },
         {
+          "task": "Undo the last commit and unstage its changes",
+          "cmd": "git reset HEAD~1",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Delete the last commit and its changes",
+          "cmd": "git reset --hard HEAD~1",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ],
+          "warning": "The commit and any uncommitted changes are lost."
+        },
+        {
+          "task": "Make your branch match GitHub exactly (run git fetch first)",
+          "cmd": "git reset --hard origin/main",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ],
+          "warning": "Local commits and uncommitted changes are lost."
+        },
+        {
+          "task": "Undo a commit you've already pushed, with a new commit",
+          "cmd": "git revert abc1234",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Bring back a file from an earlier commit",
+          "cmd": "git restore --source abc1234 file.txt",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Find a lost commit, for example after a reset",
+          "cmd": "git reflog",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Preview which untracked files would be deleted",
+          "cmd": "git clean -n",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Delete untracked files and folders",
+          "cmd": "git clean -fd",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ],
+          "warning": "Deletes files Git isn't tracking, and they can't be recovered. Run git clean -n first."
+        }
+      ]
+    },
+    {
+      "group": "Stash",
+      "items": [
+        {
+          "task": "Put uncommitted changes aside for later",
+          "cmd": "git stash",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Put changes aside with a note, including new files",
+          "cmd": "git stash push -u -m \"Half-finished login form\"",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "List the changes you've put aside",
+          "cmd": "git stash list",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Show what the latest stash changes",
+          "cmd": "git stash show -p",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Bring back the latest stash and remove it from the list",
+          "cmd": "git stash pop",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Bring back the latest stash and keep it in the list",
+          "cmd": "git stash apply",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Delete the latest stash",
+          "cmd": "git stash drop",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ],
+          "warning": "The stashed changes are lost."
+        },
+        {
+          "task": "Create a branch from the latest stash",
+          "cmd": "git stash branch my-branch",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "History",
+      "items": [
+        {
           "task": "View history as a compact graph",
           "cmd": "git log --oneline --graph",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "View every branch as a graph",
+          "cmd": "git log --oneline --graph --all",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Show the last 5 commits",
+          "cmd": "git log -5 --oneline",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Show every change to a file, including renames",
+          "cmd": "git log --follow -p file.txt",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Find commits by words in their message",
+          "cmd": "git log --grep=\"login\" --oneline",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Find commits that added or removed some text",
+          "cmd": "git log -S \"apiKey\" --oneline",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Show commits by one person",
+          "cmd": "git log --author=\"Gerard\" --oneline",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Show commits from the last two weeks",
+          "cmd": "git log --since=\"2 weeks ago\" --oneline",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "See who last changed each line of a file",
+          "cmd": "git blame file.txt",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Count commits by each person",
+          "cmd": "git shortlog -sn",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Find a broken commit",
+      "items": [
+        {
+          "task": "Start searching for the commit that broke something",
+          "cmd": "git bisect start",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Mark the current commit as broken",
+          "cmd": "git bisect bad",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Mark a commit as working",
+          "cmd": "git bisect good abc1234",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Finish searching and go back to where you were",
+          "cmd": "git bisect reset",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Tags and releases",
+      "items": [
+        {
+          "task": "List tags",
+          "cmd": "git tag",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Tag the current commit as a release",
+          "cmd": "git tag -a v1.0.0 -m \"Version 1.0.0\"",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Tag an earlier commit",
+          "cmd": "git tag -a v0.9.0 abc1234 -m \"Version 0.9.0\"",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Push a tag to GitHub",
+          "cmd": "git push origin v1.0.0",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Push all your tags to GitHub",
+          "cmd": "git push --tags",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Delete a tag on your computer",
+          "cmd": "git tag -d v1.0.0",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Delete a tag on GitHub",
+          "cmd": "git push origin --delete v1.0.0",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Ignore files",
+      "items": [
+        {
+          "task": "Ignore a folder by adding it to .gitignore",
+          "cmd": "echo \"node_modules/\" >> .gitignore",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Find out why a file is being ignored",
+          "cmd": "git check-ignore -v file.txt",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "List ignored files",
+          "cmd": "git status --ignored",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Worktrees and submodules",
+      "items": [
+        {
+          "task": "Open another branch in a separate folder",
+          "cmd": "git worktree add ../hotfix hotfix",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "List the folders open as worktrees",
+          "cmd": "git worktree list",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Remove a worktree folder",
+          "cmd": "git worktree remove ../hotfix",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Add another repository inside this one",
+          "cmd": "git submodule add https://github.com/user/library.git libs/library",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Copy a repository and its submodules",
+          "cmd": "git clone --recurse-submodules https://github.com/user/repo.git",
+          "platforms": [
+            "linux",
+            "macos",
+            "windows"
+          ]
+        },
+        {
+          "task": "Download submodules after cloning",
+          "cmd": "git submodule update --init --recursive",
           "platforms": [
             "linux",
             "macos",
