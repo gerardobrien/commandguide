@@ -932,7 +932,7 @@
       ]
     },
     {
-      "group": "Find the commit that broke something",
+      "group": "Find a broken commit",
       "items": [
         {
           "task": "Start searching for the commit that broke something",
