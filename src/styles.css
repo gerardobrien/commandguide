@@ -214,7 +214,7 @@ mark { background: var(--marker); color: #0d1147; }
 .site-footer { border-top: 1px solid var(--rule); color: var(--muted); }
 .site-footer .wrap { padding-top: 1.5rem; padding-bottom: 2.5rem; }
 .site-footer p { margin: 0; }
-.site-footer p + p { margin-top: .25rem; color: var(--ink); font-weight: 600; }
+.credits { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .25rem 2rem; margin-top: .5rem; color: var(--ink); font-weight: 600; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
