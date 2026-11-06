@@ -72,7 +72,8 @@ a { color: inherit; text-underline-offset: .2em; }
 .topnav { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .25rem 2rem; padding-top: 1.25rem; }
 .topnav a { display: inline-block; padding: .35rem 0; text-decoration: none; }
 .topnav a:hover { text-decoration: underline; }
-.wordmark { font-weight: 800; letter-spacing: -.01em; }
+.wordmark { font-size: 1.375rem; font-weight: 800; letter-spacing: -.015em; }
+.topnav { align-items: baseline; }
 .topnav-links { display: flex; flex-wrap: wrap; gap: 0 1.25rem; }
 .topnav-links [aria-current="page"] { font-weight: 800; text-decoration: underline; text-decoration-thickness: 2px; }
 
@@ -213,7 +214,7 @@ mark { background: var(--marker); color: #0d1147; }
 .site-footer { border-top: 1px solid var(--rule); color: var(--muted); }
 .site-footer .wrap { padding-top: 1.5rem; padding-bottom: 2.5rem; }
 .site-footer p { margin: 0; }
-.site-footer p + p { margin-top: .25rem; color: var(--ink); font-weight: 600; }
+.credits { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .25rem 2rem; margin-top: .5rem; color: var(--ink); font-weight: 600; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

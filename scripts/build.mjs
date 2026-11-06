@@ -56,7 +56,10 @@ ${items.map(row).join("\n")}
 
 const footer = `<footer class="site-footer"><div class="wrap">
 <p>Check a command before you run it, and replace the example names with your own.</p>
-<p>Brought to you by Tech with Gerard. Made in Dublin. Supervised by Barry.</p>
+<div class="credits">
+<p>Brought to you by <a href="https://www.gerardobrien.com">Tech with Gerard</a>.</p>
+<p>Made in Dublin. Supervised by Barry.</p>
+</div>
 </div></footer>`;
 const script = `<script src="/${jsFile}"></script>`;
 
