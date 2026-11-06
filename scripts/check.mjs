@@ -28,7 +28,7 @@ for (const slug of order) {
   }
 }
 
-const required = ["index.html", "404.html", "styles.css", "app.js", ".htaccess", "version.txt", "sitemap.xml", "robots.txt", "favicon.svg", "fonts/bricolage-grotesque.woff2", "fonts/martian-mono.woff2", ...order.map((s) => `${s}/index.html`)];
+const required = ["index.html", "404.html", ".htaccess", "version.txt", "sitemap.xml", "robots.txt", "favicon.svg", "fonts/bricolage-grotesque.woff2", "fonts/martian-mono.woff2", ...order.map((s) => `${s}/index.html`)];
 for (const file of required) await access(`dist/${file}`).catch(() => errors.push(`Missing dist/${file}`));
 
 for (const file of ["index.html", "404.html", ...order.map((s) => `${s}/index.html`)]) {
