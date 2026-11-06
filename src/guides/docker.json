@@ -2,6 +2,7 @@
   "slug": "docker",
   "title": "Docker commands",
   "description": "Docker commands for listing containers, reading logs, opening a shell and starting Compose stacks.",
+  "tone": "sky",
   "groups": [
     {
       "group": "Docker",

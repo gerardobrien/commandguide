@@ -2,6 +2,7 @@
   "slug": "git",
   "title": "Git commands",
   "description": "Git commands for branches, commits, pushing changes, undoing mistakes and viewing history.",
+  "tone": "coral",
   "groups": [
     {
       "group": "Git",
