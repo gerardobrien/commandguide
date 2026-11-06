@@ -23,7 +23,7 @@ const index = page("Command Guide", `<div class="wrap">
 <main>
 ${sections}
 </main>
-<footer>Check a command before you run it. Replace the example names with your own.</footer>
+<footer>Check a command before you run it. Replace the example names with your own. Commands are written for Linux, and some work differently or are missing on macOS.</footer>
 </div>
 <script src="/app.js"></script>`);
 
