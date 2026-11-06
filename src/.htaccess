@@ -13,8 +13,16 @@ RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
   Header always set Content-Security-Policy "default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
 </IfModule>
 
-<FilesMatch "version\.txt$">
-  <IfModule mod_headers.c>
+<IfModule mod_headers.c>
+  # Pages are always rechecked, so a new deploy shows up straight away.
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+  # These filenames change whenever their contents change, so they can be cached for a long time.
+  <FilesMatch "\.[0-9a-f]{10}\.(css|js)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "version\.txt$">
     Header set Cache-Control "no-store"
-  </IfModule>
-</FilesMatch>
+  </FilesMatch>
+</IfModule>

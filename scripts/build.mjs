@@ -1,6 +1,7 @@
 // Builds the static site into dist/. Uses Node's standard library only.
 // To add a guide: create src/guides/<slug>.json and add the slug to src/guide-order.json.
 import { execSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 
 const SITE = "https://commandguide.com";
@@ -15,7 +16,14 @@ const countOf = (g) => g.groups.reduce((n, { items }) => n + items.length, 0);
 
 const order = await readJson("src/guide-order.json");
 const guides = await Promise.all(order.map((slug) => readJson(`src/guides/${slug}.json`)));
-const layout = await readFile("src/layout.html", "utf8");
+const fingerprint = async (name) => {
+  const [base, ext] = name.split(".");
+  const hash = createHash("sha256").update(await readFile(`src/${name}`)).digest("hex").slice(0, 10);
+  return `${base}.${hash}.${ext}`;
+};
+const cssFile = await fingerprint("styles.css");
+const jsFile = await fingerprint("app.js");
+const layout = (await readFile("src/layout.html", "utf8")).replace("/styles.css", () => `/${cssFile}`);
 
 const page = ({ title, description, path, body }) => layout
   .replace("{{title}}", () => esc(title))
@@ -50,7 +58,7 @@ const footer = `<footer class="site-footer"><div class="wrap">
 <p>Check a command before you run it, and replace the example names with your own.</p>
 <p>Brought to you by Tech with Gerard. Made in Dublin. Supervised by Barry.</p>
 </div></footer>`;
-const script = '<script src="/app.js"></script>';
+const script = `<script src="/${jsFile}"></script>`;
 
 const home = page({
   title: "Command Guide",
@@ -145,7 +153,9 @@ for (const g of guides) {
   await mkdir(`dist/${g.slug}`);
   await writeFile(`dist/${g.slug}/index.html`, guidePage(g));
 }
-for (const file of ["styles.css", "app.js", ".htaccess", "favicon.svg"]) await cp(`src/${file}`, `dist/${file}`);
+await cp("src/styles.css", `dist/${cssFile}`);
+await cp("src/app.js", `dist/${jsFile}`);
+for (const file of [".htaccess", "favicon.svg"]) await cp(`src/${file}`, `dist/${file}`);
 const fonts = "node_modules/@fontsource-variable";
 await cp(`${fonts}/bricolage-grotesque/files/bricolage-grotesque-latin-opsz-normal.woff2`, "dist/fonts/bricolage-grotesque.woff2");
 await cp(`${fonts}/martian-mono/files/martian-mono-latin-wght-normal.woff2`, "dist/fonts/martian-mono.woff2");

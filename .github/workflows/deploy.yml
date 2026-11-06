@@ -70,9 +70,14 @@ jobs:
           for attempt in 1 2 3 4 5 6; do
             live=$(curl -fsS "https://commandguide.com/version.txt?check=$GITHUB_RUN_ID-$attempt" || true)
             if [ "$live" = "$GITHUB_SHA" ]; then
-              curl -fsS -o /dev/null https://commandguide.com/
-              echo "Live site is running $GITHUB_SHA"
-              exit 0
+              css=$(curl -fsS https://commandguide.com/ | grep -oE '/styles\.[0-9a-f]{10}\.css' | head -1)
+              if [ -n "$css" ] && curl -fsS -o /dev/null -w '%{content_type}' "https://commandguide.com$css" | grep -q 'text/css'; then
+                echo "Live site is running $GITHUB_SHA with $css"
+                exit 0
+              fi
+              echo "Attempt $attempt: page or stylesheet is not updated yet"
+              sleep 10
+              continue
             fi
             echo "Attempt $attempt: live version is '${live:-unavailable}'"
             sleep 10
