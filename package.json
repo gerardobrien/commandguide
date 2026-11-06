@@ -3,11 +3,17 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "build": "node scripts/build.mjs",
     "check": "html-validate \"dist/**/*.html\" && node scripts/check.mjs",
     "test": "npm run build && npm run check"
   },
-  "devDependencies": { "html-validate": "11.18.0" }
+  "devDependencies": {
+    "@fontsource-variable/bricolage-grotesque": "^5.3.0",
+    "@fontsource-variable/martian-mono": "^5.3.0",
+    "html-validate": "11.18.0"
+  }
 }

@@ -11,7 +11,7 @@ A searchable command cheat sheet, used to test a Claude → GitHub → Hostinger
 
 To add a command, edit the guide's file in `src/guides/`. Each command needs a `task`, a `cmd` and `platforms`, and can have a `warning` for anything destructive.
 
-To add a guide, create `src/guides/<slug>.json` and add the slug to `src/guide-order.json`. The build creates its page, navigation link and sitemap entry.
+To add a guide, create `src/guides/<slug>.json`, with a `tone` for its colour (amber, coral, sky, mint or violet), and add the slug to `src/guide-order.json`. The build creates its page, navigation link and sitemap entry.
 
 ## Run it locally
 

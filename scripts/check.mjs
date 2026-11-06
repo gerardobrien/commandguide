@@ -3,6 +3,7 @@ import { access, readFile, readdir } from "node:fs/promises";
 
 const errors = [];
 const PLATFORMS = new Set(["linux", "macos", "windows", "cisco"]);
+const TONES = new Set(["amber", "coral", "sky", "mint", "violet"]);
 const order = JSON.parse(await readFile("src/guide-order.json", "utf8"));
 const files = (await readdir("src/guides")).map((f) => f.replace(/\.json$/, ""));
 for (const f of files) if (!order.includes(f)) errors.push(`src/guides/${f}.json is not listed in guide-order.json`);
@@ -12,6 +13,7 @@ for (const slug of order) {
   const guide = JSON.parse(await readFile(`src/guides/${slug}.json`, "utf8"));
   if (guide.slug !== slug) errors.push(`${slug}: slug doesn't match the file name`);
   if (!guide.title || !guide.description) errors.push(`${slug}: missing title or description`);
+  if (!TONES.has(guide.tone)) errors.push(`${slug}: tone must be one of ${[...TONES].join(", ")}`);
   const seen = new Set();
   for (const { group, items } of guide.groups) {
     if (!group || !items?.length) errors.push(`${slug}: empty or unnamed group`);
@@ -26,7 +28,7 @@ for (const slug of order) {
   }
 }
 
-const required = ["index.html", "404.html", "styles.css", "app.js", ".htaccess", "version.txt", "sitemap.xml", "robots.txt", ...order.map((s) => `${s}/index.html`)];
+const required = ["index.html", "404.html", "styles.css", "app.js", ".htaccess", "version.txt", "sitemap.xml", "robots.txt", "favicon.svg", "fonts/bricolage-grotesque.woff2", "fonts/martian-mono.woff2", ...order.map((s) => `${s}/index.html`)];
 for (const file of required) await access(`dist/${file}`).catch(() => errors.push(`Missing dist/${file}`));
 
 for (const file of ["index.html", "404.html", ...order.map((s) => `${s}/index.html`)]) {

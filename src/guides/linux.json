@@ -2,6 +2,7 @@
   "slug": "linux",
   "title": "Linux commands",
   "description": "Linux terminal commands for files, text, networking, SSH and processes, with notes on what also works on macOS.",
+  "tone": "amber",
   "groups": [
     {
       "group": "Files",

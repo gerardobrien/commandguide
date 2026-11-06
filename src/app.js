@@ -1,9 +1,12 @@
 const input = document.getElementById("q");
 const status = document.getElementById("status");
+const hero = document.querySelector(".hero");
 const guideList = document.getElementById("guides");
 const results = document.getElementById("results");
-const rows = [...document.querySelectorAll("li[data-cmd]")];
+const tryRow = document.getElementById("try");
+const rows = [...document.querySelectorAll("li.cmd")];
 const sections = [...document.querySelectorAll("section")];
+const STOP_WORDS = new Set(["a", "an", "the", "my", "to", "i", "want", "how", "do", "of", "in", "on", "for", "is"]);
 
 function paint(el, source, terms) {
   el.textContent = "";
@@ -28,46 +31,94 @@ function paint(el, source, terms) {
 }
 
 function filter() {
-  const terms = input.value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  const typed = input.value.trim();
+  const words = typed.toLowerCase().split(/\s+/).filter(Boolean);
+  const meaningful = words.filter((word) => !STOP_WORDS.has(word));
+  const terms = meaningful.length ? meaningful : words;
   let shown = 0;
   for (const row of rows) {
-    const task = row.querySelector(".task");
-    const cmd = row.querySelector("code");
     const text = `${row.dataset.task} ${row.dataset.cmd} ${row.dataset.platforms}`.toLowerCase();
     const match = terms.every((term) => text.includes(term));
     row.hidden = !match;
     if (match) {
       shown += 1;
-      paint(task, row.dataset.task, terms);
-      paint(cmd, row.dataset.cmd, terms);
+      paint(row.querySelector(".task"), row.dataset.task, terms);
+      paint(row.querySelector("code"), row.dataset.cmd, terms);
     }
   }
   for (const section of sections) {
-    section.hidden = !section.querySelector("li:not([hidden])");
+    const visible = Boolean(section.querySelector("li.cmd:not([hidden])"));
+    section.hidden = !visible;
+    const link = document.querySelector(`.toc [data-section="${section.id}"]`);
+    if (link) link.hidden = !visible;
   }
+  const active = terms.length > 0;
+  hero.classList.toggle("is-searching", active);
   if (guideList) {
-    guideList.hidden = terms.length > 0;
-    results.hidden = terms.length === 0;
+    guideList.hidden = active;
+    results.hidden = !active;
+    tryRow.hidden = active;
   }
-  status.textContent = !terms.length
-    ? `${rows.length} commands`
-    : shown
-      ? `${shown} of ${rows.length} commands`
-      : "No commands match. Try one word, like “port” or “branch”.";
+  if (!active) status.textContent = guideList ? "" : `${rows.length} commands`;
+  else if (shown) status.textContent = `${shown} of ${rows.length} commands`;
+  else status.textContent = "No commands match. Try one word, like “port” or “branch”.";
 }
 
 document.addEventListener("click", async (event) => {
-  const button = event.target.closest("button");
+  const fill = event.target.closest("[data-fill]");
+  if (fill) {
+    input.value = fill.dataset.fill;
+    filter();
+    input.focus();
+    return;
+  }
+  const button = event.target.closest(".cmd button");
   if (!button) return;
-  const cmd = button.closest("li[data-cmd]").dataset.cmd;
+  const cmd = button.closest("li.cmd").dataset.cmd;
   try {
     await navigator.clipboard.writeText(cmd);
     button.textContent = "Copied";
+    button.classList.add("is-copied");
   } catch {
     button.textContent = "Failed";
   }
-  setTimeout(() => { button.textContent = "Copy"; }, 1500);
+  setTimeout(() => {
+    button.textContent = "Copy";
+    button.classList.remove("is-copied");
+  }, 1500);
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "/" && document.activeElement !== input) {
+    event.preventDefault();
+    input.focus();
+  } else if (event.key === "Escape" && document.activeElement === input) {
+    input.value = "";
+    filter();
+  }
 });
 
 input.addEventListener("input", filter);
 filter();
+
+// The home page types out example tasks in the empty search box.
+const examples = input.dataset.examples ? JSON.parse(input.dataset.examples) : [];
+if (examples.length && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  let example = 0;
+  let length = examples[0].length;
+  let deleting = true;
+  let pause = 14;
+  setInterval(() => {
+    if (document.hidden || input.value || document.activeElement === input) return;
+    if (pause > 0) { pause -= 1; return; }
+    length += deleting ? -1 : 1;
+    if (length <= 0) {
+      deleting = false;
+      example = (example + 1) % examples.length;
+    } else if (length >= examples[example].length) {
+      deleting = true;
+      pause = 22;
+    }
+    input.placeholder = examples[example].slice(0, Math.max(length, 0));
+  }, 70);
+}

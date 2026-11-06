@@ -5,9 +5,13 @@ import { cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 
 const SITE = "https://commandguide.com";
 const PLATFORM_NAMES = { linux: "Linux", macos: "macOS", windows: "Windows", cisco: "Cisco IOS" };
+const EXAMPLES = ["undo the last commit", "see what is using disk space", "list listening ports", "follow a container's logs", "create a new SSH key"];
 
 const esc = (s) => s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 const readJson = async (path) => JSON.parse(await readFile(path, "utf8"));
+const shortName = (g) => g.title.replace(/ commands$/, "");
+const slugify = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+const countOf = (g) => g.groups.reduce((n, { items }) => n + items.length, 0);
 
 const order = await readJson("src/guide-order.json");
 const guides = await Promise.all(order.map((slug) => readJson(`src/guides/${slug}.json`)));
@@ -19,51 +23,64 @@ const page = ({ title, description, path, body }) => layout
   .replace("{{canonical}}", () => `${SITE}${path}`)
   .replace("{{body}}", () => body);
 
-const nav = (current) => `<nav aria-label="Guides">
-<a href="/"${current === "home" ? ' aria-current="page"' : ""}>Command Guide</a>
-${guides.map((g) => `<a href="/${g.slug}/"${current === g.slug ? ' aria-current="page"' : ""}>${esc(g.title.replace(/ commands$/, ""))}</a>`).join("\n")}
+const nav = (current) => `<nav class="topnav" aria-label="Guides">
+<a class="wordmark" href="/"${current === "home" ? ' aria-current="page"' : ""}>Command Guide</a>
+<div class="topnav-links">
+${guides.map((g) => `<a href="/${g.slug}/"${current === g.slug ? ' aria-current="page"' : ""}>${esc(shortName(g))}</a>`).join("\n")}
+</div>
 </nav>`;
 
 const row = ({ task, cmd, platforms, warning }) => {
   const names = platforms.map((p) => PLATFORM_NAMES[p]).join(", ");
-  return `<li data-task="${esc(task)}" data-cmd="${esc(cmd)}" data-platforms="${esc(names)}">
-<div><span class="task">${esc(task)}</span><small>${esc(names)}</small>${warning ? `<strong class="warning">Warning: ${esc(warning)}</strong>` : ""}</div>
-<code>${esc(cmd)}</code><button type="button">Copy</button></li>`;
+  return `<li class="cmd" data-task="${esc(task)}" data-cmd="${esc(cmd)}" data-platforms="${esc(names)}">
+<div class="cmd-head"><span class="task">${esc(task)}</span><small>${esc(names)}</small></div>
+<div class="cmd-line"><code>${esc(cmd)}</code><button type="button" aria-label="Copy command: ${esc(task)}">Copy</button></div>
+${warning ? `<p class="warning">Warning: ${esc(warning)}</p>` : ""}
+</li>`;
 };
 
-const sections = (guide, heading) => guide.groups.map(({ group, items }) => `<section>
+const sections = (guide, heading, idPrefix = "") => guide.groups.map(({ group, items }) => `<section id="${idPrefix}${slugify(group)}">
 <h2>${esc(heading(group))}</h2>
 <ul class="commands">
 ${items.map(row).join("\n")}
 </ul>
 </section>`).join("\n");
 
-const search = (label, placeholder, tag = "label") => `<${tag === "h1" ? "h1" : "div"} class="ask"><label for="q">${esc(label)}</label></${tag === "h1" ? "h1" : "div"}>
-<input id="q" type="search" placeholder="${esc(placeholder)}" autocomplete="off" spellcheck="false">
-<p id="status" role="status"></p>`;
-
-const footer = "<footer>Check a command before you run it. Replace the example names with your own.</footer>";
+const footer = `<footer class="site-footer"><div class="wrap">
+<p>Check a command before you run it, and replace the example names with your own.</p>
+</div></footer>`;
 const script = '<script src="/app.js"></script>';
 
 const home = page({
   title: "Command Guide",
-  description: "Find the command for what you want to do, then copy it.",
+  description: "Say what you want to do, and get the command to do it.",
   path: "/",
-  body: `<div class="wrap">
+  body: `<header class="hero" id="hero">
+<div class="wrap">
 ${nav("home")}
-<header>
-${search("What do you want to do?", "open port, undo commit, disk space", "h1")}
+<div class="ask">
+<h1><label for="q">I want to</label></h1>
+<input id="q" type="search" data-examples="${esc(JSON.stringify(EXAMPLES))}" placeholder="${esc(EXAMPLES[0])}" autocomplete="off" spellcheck="false">
+<div class="try" id="try"><span>Try</span>
+${EXAMPLES.slice(1, 4).map((e) => `<button type="button" data-fill="${esc(e)}">${esc(e)}</button>`).join("\n")}
+</div>
+<p id="status" role="status"></p>
+</div>
+</div>
 </header>
-<main>
+<main class="wrap sheet">
 <div id="guides" class="guide-list">
-${guides.map((g) => `<a href="/${g.slug}/"><span>${esc(g.title)}</span><small>${esc(g.description)}</small></a>`).join("\n")}
+${guides.map((g) => `<a class="guide-row tone-${g.tone}" href="/${g.slug}/">
+<span class="guide-name">${esc(shortName(g))}</span>
+<span class="guide-desc">${esc(g.description)}</span>
+<span class="guide-count">${countOf(g)} commands</span>
+</a>`).join("\n")}
 </div>
 <div id="results" hidden>
-${guides.map((g) => sections(g, (group) => `${g.title.replace(/ commands$/, "")}: ${group}`)).join("\n")}
+${guides.map((g) => sections(g, (group) => (group === shortName(g) ? group : `${shortName(g)}: ${group}`), `${g.slug}-`)).join("\n")}
 </div>
 </main>
 ${footer}
-</div>
 ${script}`,
 });
 
@@ -71,16 +88,25 @@ const guidePage = (g) => page({
   title: `${g.title} | Command Guide`,
   description: g.description,
   path: `/${g.slug}/`,
-  body: `<div class="wrap">
+  body: `<header class="hero hero-guide tone-${g.tone}">
+<div class="wrap">
 ${nav(g.slug)}
-<header>
-${search(g.title, `Search ${g.title}`, "h1")}
+<div class="ask">
+<h1><label for="q">${esc(g.title)}</label></h1>
+<input id="q" type="search" placeholder="Search ${esc(g.title)}" autocomplete="off" spellcheck="false">
+<p id="status" role="status"></p>
+</div>
+</div>
 </header>
+<div class="wrap sheet guide-layout">
+<nav class="toc" aria-label="Sections">
+${g.groups.map(({ group, items }) => `<a href="#${slugify(group)}" data-section="${slugify(group)}"><span>${esc(group)}</span><span>${items.length}</span></a>`).join("\n")}
+</nav>
 <main>
 ${sections(g, (group) => group)}
 </main>
-${footer}
 </div>
+${footer}
 ${script}`,
 });
 
@@ -88,13 +114,15 @@ const notFound = page({
   title: "Page not found | Command Guide",
   description: "This page doesn't exist.",
   path: "/404.html",
-  body: `<div class="wrap">
+  body: `<header class="hero hero-guide">
+<div class="wrap">
 ${nav("")}
-<header>
-<h1 class="ask">That page doesn't exist.</h1>
-<p><a href="/">Go to the command list</a></p>
-</header>
-</div>`,
+<div class="ask">
+<h1>That page doesn't exist.</h1>
+<p class="missing"><a href="/">Search all commands</a></p>
+</div>
+</div>
+</header>`,
 });
 
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
@@ -106,7 +134,7 @@ ${["/", ...guides.map((g) => `/${g.slug}/`)].map((p) => `<url><loc>${SITE}${p}</
 const version = process.env.GITHUB_SHA ?? execSync("git rev-parse HEAD 2>/dev/null || echo local", { shell: "/bin/sh" }).toString().trim();
 
 await rm("dist", { recursive: true, force: true });
-await mkdir("dist");
+await mkdir("dist/fonts", { recursive: true });
 await writeFile("dist/index.html", home);
 await writeFile("dist/404.html", notFound);
 await writeFile("dist/version.txt", `${version}\n`);
@@ -116,6 +144,8 @@ for (const g of guides) {
   await mkdir(`dist/${g.slug}`);
   await writeFile(`dist/${g.slug}/index.html`, guidePage(g));
 }
-for (const file of ["styles.css", "app.js", ".htaccess"]) await cp(`src/${file}`, `dist/${file}`);
-const total = guides.flatMap((g) => g.groups).flatMap((g) => g.items).length;
-console.log(`Built ${guides.length} guides with ${total} commands at ${version}`);
+for (const file of ["styles.css", "app.js", ".htaccess", "favicon.svg"]) await cp(`src/${file}`, `dist/${file}`);
+const fonts = "node_modules/@fontsource-variable";
+await cp(`${fonts}/bricolage-grotesque/files/bricolage-grotesque-latin-opsz-normal.woff2`, "dist/fonts/bricolage-grotesque.woff2");
+await cp(`${fonts}/martian-mono/files/martian-mono-latin-wght-normal.woff2`, "dist/fonts/martian-mono.woff2");
+console.log(`Built ${guides.length} guides with ${guides.reduce((n, g) => n + countOf(g), 0)} commands at ${version}`);
