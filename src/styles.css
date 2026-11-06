@@ -72,7 +72,8 @@ a { color: inherit; text-underline-offset: .2em; }
 .topnav { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .25rem 2rem; padding-top: 1.25rem; }
 .topnav a { display: inline-block; padding: .35rem 0; text-decoration: none; }
 .topnav a:hover { text-decoration: underline; }
-.wordmark { font-weight: 800; letter-spacing: -.01em; }
+.wordmark { font-size: 1.375rem; font-weight: 800; letter-spacing: -.015em; }
+.topnav { align-items: baseline; }
 .topnav-links { display: flex; flex-wrap: wrap; gap: 0 1.25rem; }
 .topnav-links [aria-current="page"] { font-weight: 800; text-decoration: underline; text-decoration-thickness: 2px; }
 
