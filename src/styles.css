@@ -211,7 +211,9 @@ mark { background: var(--marker); color: #0d1147; }
 }
 
 .site-footer { border-top: 1px solid var(--rule); color: var(--muted); }
-.site-footer p { margin: 0; padding: 1.5rem 0 2.5rem; }
+.site-footer .wrap { padding-top: 1.5rem; padding-bottom: 2.5rem; }
+.site-footer p { margin: 0; }
+.site-footer p + p { margin-top: .25rem; color: var(--ink); font-weight: 600; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

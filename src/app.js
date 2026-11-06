@@ -6,7 +6,7 @@ const results = document.getElementById("results");
 const tryRow = document.getElementById("try");
 const rows = [...document.querySelectorAll("li.cmd")];
 const sections = [...document.querySelectorAll("section")];
-const STOP_WORDS = new Set(["a", "an", "the", "my", "to", "i", "want", "how", "do", "of", "in", "on", "for", "is"]);
+const STOP_WORDS = new Set(["a", "an", "the", "my", "to", "i", "want", "how", "do", "of", "in", "on", "for", "is", "learn", "know", "understand", "help", "me", "about", "please", "need", "would", "like", "can", "some", "show", "commands", "command"]);
 
 function paint(el, source, terms) {
   el.textContent = "";
@@ -35,10 +35,13 @@ function filter() {
   const words = typed.toLowerCase().split(/\s+/).filter(Boolean);
   const meaningful = words.filter((word) => !STOP_WORDS.has(word));
   const terms = meaningful.length ? meaningful : words;
+  const textOf = (row) => `${row.dataset.task} ${row.dataset.cmd} ${row.dataset.platforms}`.toLowerCase();
+  // Prefer commands matching every word. If there are none, show any that match a word.
+  const exact = rows.some((row) => terms.every((term) => textOf(row).includes(term)));
   let shown = 0;
   for (const row of rows) {
-    const text = `${row.dataset.task} ${row.dataset.cmd} ${row.dataset.platforms}`.toLowerCase();
-    const match = terms.every((term) => text.includes(term));
+    const text = textOf(row);
+    const match = exact ? terms.every((term) => text.includes(term)) : terms.some((term) => text.includes(term));
     row.hidden = !match;
     if (match) {
       shown += 1;
@@ -60,7 +63,8 @@ function filter() {
     tryRow.hidden = active;
   }
   if (!active) status.textContent = guideList ? "" : `${rows.length} commands`;
-  else if (shown) status.textContent = `${shown} of ${rows.length} commands`;
+  else if (shown && exact) status.textContent = `${shown} of ${rows.length} commands`;
+  else if (shown) status.textContent = `No exact match. Showing ${shown} commands that match some of your words.`;
   else status.textContent = "No commands match. Try one word, like “port” or “branch”.";
 }
 
