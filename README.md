@@ -6,7 +6,7 @@
 
 The site is organised into guides, each with its own page and search:
 
-- **Linux:** files, text, networking, SSH and processes
+- **Linux:** files, packages, services, networking, firewalls, storage and more, with versions for Debian and Ubuntu, Red Hat and Fedora, and Alpine where they differ
 - **Git:** branches, commits, pushing changes and undoing mistakes
 - **Docker:** containers, logs, shells and Compose stacks
 
@@ -16,7 +16,7 @@ More guides are planned, including Windows and Cisco, along with tools such as a
 
 ## Add content
 
-To add a command, edit the guide's file in `src/guides/`. Each command needs a `task`, a `cmd` and `platforms`, and can have a `warning` for anything destructive.
+To add a command, edit the guide's file in `src/guides/`. Each command needs a `task`, a `cmd` and `platforms`, and can have a `warning` for anything destructive. Linux commands that differ by distro also have `distros`: `debian`, `redhat` or `alpine`. Put a task's distro versions next to each other and they're shown together.
 
 To add a guide, create `src/guides/<slug>.json`, with a `tone` for its colour (amber, coral, sky, mint or violet), and add the slug to `src/guide-order.json`. The build creates its page, navigation link and sitemap entry.
 

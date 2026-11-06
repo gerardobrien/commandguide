@@ -1,15 +1,1085 @@
 {
   "slug": "linux",
   "title": "Linux commands",
-  "description": "Linux terminal commands for files, text, networking, SSH and processes, with notes on what also works on macOS.",
+  "description": "Linux commands for files, packages, services, networking, firewalls and more, with versions for Debian and Ubuntu, Red Hat and Fedora, and Alpine.",
   "tone": "amber",
+  "note": "Where distros differ, each one gets its own command. Alpine examples assume you're root, because Alpine doesn't include sudo by default, and some options differ on Alpine's built-in tools.",
   "groups": [
     {
-      "group": "Files",
+      "group": "Files and folders",
       "items": [
+        {
+          "task": "List files, including hidden ones, with sizes",
+          "cmd": "ls -lah",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Show the current folder",
+          "cmd": "pwd",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Go to your home folder",
+          "cmd": "cd ~",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Create a folder and any missing parent folders",
+          "cmd": "mkdir -p projects/site/assets",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Copy a folder and everything in it",
+          "cmd": "cp -r source/ backup/",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Move or rename a file",
+          "cmd": "mv old-name.txt new-name.txt",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Delete a file",
+          "cmd": "rm file.txt",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Delete a folder and everything in it",
+          "cmd": "rm -rf folder/",
+          "platforms": [
+            "linux",
+            "macos"
+          ],
+          "warning": "Deletes without asking and can't be undone. Check the path before you run it."
+        },
+        {
+          "task": "Create a shortcut (symbolic link) to a file",
+          "cmd": "ln -s /path/to/target link-name",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Show a file's permissions, size and timestamps",
+          "cmd": "stat file.txt",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
         {
           "task": "Find files by name",
           "cmd": "find . -name \"*.log\"",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Find files changed in the last day",
+          "cmd": "find . -type f -mtime -1",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Find files larger than 100 MB",
+          "cmd": "find / -type f -size +100M 2>/dev/null",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Text",
+      "items": [
+        {
+          "task": "Show a file's contents",
+          "cmd": "cat file.txt",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Scroll through a long file",
+          "cmd": "less file.txt",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Show the first 20 lines of a file",
+          "cmd": "head -n 20 file.txt",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Show the last 50 lines of a file",
+          "cmd": "tail -n 50 file.txt",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Search for text in a folder",
+          "cmd": "grep -rn \"error\" .",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Search for text, ignoring case",
+          "cmd": "grep -i \"error\" app.log",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Show lines that don't contain some text",
+          "cmd": "grep -v \"debug\" app.log",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Replace text in a file",
+          "cmd": "sed -i 's/old/new/g' file.txt",
+          "platforms": [
+            "linux"
+          ],
+          "warning": "Changes the file straight away, with no backup."
+        },
+        {
+          "task": "Count lines in a file",
+          "cmd": "wc -l file.txt",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Sort lines and remove duplicates",
+          "cmd": "sort file.txt | uniq",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Count how often each line appears",
+          "cmd": "sort file.txt | uniq -c | sort -rn",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Print the first column of each line",
+          "cmd": "awk '{print $1}' access.log",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Compare two files",
+          "cmd": "diff -u old.txt new.txt",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Edit a file in the terminal",
+          "cmd": "nano file.txt",
+          "platforms": [
+            "linux"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Permissions",
+      "items": [
+        {
+          "task": "Make a script runnable",
+          "cmd": "chmod +x script.sh",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Let only the owner read and write a file",
+          "cmd": "chmod 600 secrets.env",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Set standard folder permissions",
+          "cmd": "chmod 755 folder/",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Change a file's owner and group",
+          "cmd": "sudo chown alice:alice file.txt",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Change the owner of a folder and everything in it",
+          "cmd": "sudo chown -R alice:alice folder/",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Show your user ID and groups",
+          "cmd": "id",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Open a shell as the root user",
+          "cmd": "sudo -i",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Users and groups",
+      "items": [
+        {
+          "task": "Show which user you are",
+          "cmd": "whoami",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Show who is logged in",
+          "cmd": "who",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Create a user with a home folder",
+          "cmd": "sudo adduser alice",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "debian"
+          ]
+        },
+        {
+          "task": "Create a user with a home folder",
+          "cmd": "sudo useradd -m alice && sudo passwd alice",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "redhat"
+          ]
+        },
+        {
+          "task": "Create a user with a home folder",
+          "cmd": "adduser alice",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "alpine"
+          ]
+        },
+        {
+          "task": "Change a user's password",
+          "cmd": "sudo passwd alice",
+          "platforms": [
+            "linux"
+          ]
+        },
+        {
+          "task": "Give a user admin rights",
+          "cmd": "sudo usermod -aG sudo alice",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "debian"
+          ]
+        },
+        {
+          "task": "Give a user admin rights",
+          "cmd": "sudo usermod -aG wheel alice",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "redhat"
+          ]
+        },
+        {
+          "task": "Give a user admin rights",
+          "cmd": "addgroup alice wheel",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "alpine"
+          ]
+        },
+        {
+          "task": "Add a user to a group",
+          "cmd": "sudo usermod -aG docker alice",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "debian",
+            "redhat"
+          ]
+        },
+        {
+          "task": "Add a user to a group",
+          "cmd": "addgroup alice docker",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "alpine"
+          ]
+        },
+        {
+          "task": "Show a user's groups",
+          "cmd": "groups alice",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Delete a user and their home folder",
+          "cmd": "sudo deluser --remove-home alice",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "debian"
+          ],
+          "warning": "Deletes the user's files and can't be undone."
+        },
+        {
+          "task": "Delete a user and their home folder",
+          "cmd": "sudo userdel -r alice",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "redhat"
+          ],
+          "warning": "Deletes the user's files and can't be undone."
+        },
+        {
+          "task": "Delete a user and their home folder",
+          "cmd": "deluser --remove-home alice",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "alpine"
+          ],
+          "warning": "Deletes the user's files and can't be undone."
+        }
+      ]
+    },
+    {
+      "group": "Packages",
+      "items": [
+        {
+          "task": "Refresh the list of available packages",
+          "cmd": "sudo apt update",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "debian"
+          ]
+        },
+        {
+          "task": "Refresh the list of available packages",
+          "cmd": "sudo dnf check-update",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "redhat"
+          ]
+        },
+        {
+          "task": "Refresh the list of available packages",
+          "cmd": "apk update",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "alpine"
+          ]
+        },
+        {
+          "task": "Install a package",
+          "cmd": "sudo apt install nginx",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "debian"
+          ]
+        },
+        {
+          "task": "Install a package",
+          "cmd": "sudo dnf install nginx",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "redhat"
+          ]
+        },
+        {
+          "task": "Install a package",
+          "cmd": "apk add nginx",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "alpine"
+          ]
+        },
+        {
+          "task": "Update all installed packages",
+          "cmd": "sudo apt update && sudo apt upgrade",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "debian"
+          ]
+        },
+        {
+          "task": "Update all installed packages",
+          "cmd": "sudo dnf upgrade",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "redhat"
+          ]
+        },
+        {
+          "task": "Update all installed packages",
+          "cmd": "apk update && apk upgrade",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "alpine"
+          ]
+        },
+        {
+          "task": "Remove a package",
+          "cmd": "sudo apt remove nginx",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "debian"
+          ]
+        },
+        {
+          "task": "Remove a package",
+          "cmd": "sudo dnf remove nginx",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "redhat"
+          ]
+        },
+        {
+          "task": "Remove a package",
+          "cmd": "apk del nginx",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "alpine"
+          ]
+        },
+        {
+          "task": "Search for a package",
+          "cmd": "apt search nginx",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "debian"
+          ]
+        },
+        {
+          "task": "Search for a package",
+          "cmd": "dnf search nginx",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "redhat"
+          ]
+        },
+        {
+          "task": "Search for a package",
+          "cmd": "apk search nginx",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "alpine"
+          ]
+        },
+        {
+          "task": "List installed packages",
+          "cmd": "apt list --installed",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "debian"
+          ]
+        },
+        {
+          "task": "List installed packages",
+          "cmd": "dnf list --installed",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "redhat"
+          ]
+        },
+        {
+          "task": "List installed packages",
+          "cmd": "apk info",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "alpine"
+          ]
+        },
+        {
+          "task": "Find which package a file came from",
+          "cmd": "dpkg -S /usr/bin/curl",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "debian"
+          ]
+        },
+        {
+          "task": "Find which package a file came from",
+          "cmd": "dnf provides /usr/bin/curl",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "redhat"
+          ]
+        },
+        {
+          "task": "Find which package a file came from",
+          "cmd": "apk info --who-owns /usr/bin/curl",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "alpine"
+          ]
+        },
+        {
+          "task": "Remove packages that are no longer needed",
+          "cmd": "sudo apt autoremove",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "debian"
+          ]
+        },
+        {
+          "task": "Remove packages that are no longer needed",
+          "cmd": "sudo dnf autoremove",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "redhat"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Services",
+      "items": [
+        {
+          "task": "Check a service's status",
+          "cmd": "systemctl status nginx",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "debian",
+            "redhat"
+          ]
+        },
+        {
+          "task": "Check a service's status",
+          "cmd": "rc-service nginx status",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "alpine"
+          ]
+        },
+        {
+          "task": "Start a service",
+          "cmd": "sudo systemctl start nginx",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "debian",
+            "redhat"
+          ]
+        },
+        {
+          "task": "Start a service",
+          "cmd": "rc-service nginx start",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "alpine"
+          ]
+        },
+        {
+          "task": "Stop a service",
+          "cmd": "sudo systemctl stop nginx",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "debian",
+            "redhat"
+          ]
+        },
+        {
+          "task": "Stop a service",
+          "cmd": "rc-service nginx stop",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "alpine"
+          ]
+        },
+        {
+          "task": "Restart a service",
+          "cmd": "sudo systemctl restart nginx",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "debian",
+            "redhat"
+          ]
+        },
+        {
+          "task": "Restart a service",
+          "cmd": "rc-service nginx restart",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "alpine"
+          ]
+        },
+        {
+          "task": "Start a service now and at every boot",
+          "cmd": "sudo systemctl enable --now nginx",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "debian",
+            "redhat"
+          ]
+        },
+        {
+          "task": "Start a service now and at every boot",
+          "cmd": "rc-update add nginx default && rc-service nginx start",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "alpine"
+          ]
+        },
+        {
+          "task": "Stop a service starting at boot",
+          "cmd": "sudo systemctl disable nginx",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "debian",
+            "redhat"
+          ]
+        },
+        {
+          "task": "Stop a service starting at boot",
+          "cmd": "rc-update del nginx default",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "alpine"
+          ]
+        },
+        {
+          "task": "List running services",
+          "cmd": "systemctl list-units --type=service --state=running",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "debian",
+            "redhat"
+          ]
+        },
+        {
+          "task": "List running services",
+          "cmd": "rc-status",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "alpine"
+          ]
+        },
+        {
+          "task": "Reload service files after editing them",
+          "cmd": "sudo systemctl daemon-reload",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "debian",
+            "redhat"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Processes",
+      "items": [
+        {
+          "task": "Show all running processes",
+          "cmd": "ps aux",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Find a process by name",
+          "cmd": "pgrep -a nginx",
+          "platforms": [
+            "linux"
+          ]
+        },
+        {
+          "task": "Watch CPU and memory use live",
+          "cmd": "top",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Stop a process by ID",
+          "cmd": "kill 1234",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Force a process to stop",
+          "cmd": "kill -9 1234",
+          "platforms": [
+            "linux",
+            "macos"
+          ],
+          "warning": "The process can't clean up, so unsaved data may be lost."
+        },
+        {
+          "task": "Stop every process with a name",
+          "cmd": "pkill nginx",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Keep a command running after you log out",
+          "cmd": "nohup ./script.sh &",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Show what is using a port",
+          "cmd": "sudo lsof -i :443",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Logs",
+      "items": [
+        {
+          "task": "Follow a log file as it grows",
+          "cmd": "tail -f app.log",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Read a service's recent logs",
+          "cmd": "journalctl -u nginx -n 50",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "debian",
+            "redhat"
+          ]
+        },
+        {
+          "task": "Follow a service's logs live",
+          "cmd": "journalctl -u nginx -f",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "debian",
+            "redhat"
+          ]
+        },
+        {
+          "task": "Show logs since the last boot",
+          "cmd": "journalctl -b",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "debian",
+            "redhat"
+          ]
+        },
+        {
+          "task": "Show errors since the last boot",
+          "cmd": "journalctl -p err -b",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "debian",
+            "redhat"
+          ]
+        },
+        {
+          "task": "Read the system log",
+          "cmd": "tail -n 100 /var/log/messages",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "alpine"
+          ]
+        },
+        {
+          "task": "Show recent kernel messages",
+          "cmd": "sudo dmesg | tail -n 50",
+          "platforms": [
+            "linux"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "System",
+      "items": [
+        {
+          "task": "Show which distro and version is installed",
+          "cmd": "cat /etc/os-release",
+          "platforms": [
+            "linux"
+          ]
+        },
+        {
+          "task": "Show the kernel version",
+          "cmd": "uname -r",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Show how long the system has been running",
+          "cmd": "uptime",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Show memory use",
+          "cmd": "free -h",
+          "platforms": [
+            "linux"
+          ]
+        },
+        {
+          "task": "Show CPU details",
+          "cmd": "lscpu",
+          "platforms": [
+            "linux"
+          ]
+        },
+        {
+          "task": "Show the hostname",
+          "cmd": "hostname",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Change the hostname",
+          "cmd": "sudo hostnamectl set-hostname web01",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "debian",
+            "redhat"
+          ]
+        },
+        {
+          "task": "Show the date, time and time zone",
+          "cmd": "timedatectl",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "debian",
+            "redhat"
+          ]
+        },
+        {
+          "task": "Set the time zone",
+          "cmd": "sudo timedatectl set-timezone Europe/Dublin",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "debian",
+            "redhat"
+          ]
+        },
+        {
+          "task": "Restart the system",
+          "cmd": "sudo reboot",
+          "platforms": [
+            "linux"
+          ],
+          "warning": "Disconnects everyone and stops running services."
+        }
+      ]
+    },
+    {
+      "group": "Storage",
+      "items": [
+        {
+          "task": "Check free disk space",
+          "cmd": "df -h",
           "platforms": [
             "linux",
             "macos"
@@ -24,13 +1094,398 @@
           ]
         },
         {
-          "task": "Check free disk space",
-          "cmd": "df -h",
+          "task": "Find the biggest folders on the system",
+          "cmd": "sudo du -h -d 1 / 2>/dev/null | sort -h",
           "platforms": [
             "linux",
             "macos"
           ]
         },
+        {
+          "task": "List disks and partitions",
+          "cmd": "lsblk",
+          "platforms": [
+            "linux"
+          ]
+        },
+        {
+          "task": "Show disk IDs and filesystem types",
+          "cmd": "sudo blkid",
+          "platforms": [
+            "linux"
+          ]
+        },
+        {
+          "task": "Mount a partition",
+          "cmd": "sudo mount /dev/sdb1 /mnt/data",
+          "platforms": [
+            "linux"
+          ]
+        },
+        {
+          "task": "Unmount a partition",
+          "cmd": "sudo umount /mnt/data",
+          "platforms": [
+            "linux"
+          ]
+        },
+        {
+          "task": "List mounted filesystems",
+          "cmd": "findmnt",
+          "platforms": [
+            "linux"
+          ]
+        },
+        {
+          "task": "Format a partition as ext4",
+          "cmd": "sudo mkfs.ext4 /dev/sdb1",
+          "platforms": [
+            "linux"
+          ],
+          "warning": "Erases everything on the partition. Check the device name with lsblk first."
+        }
+      ]
+    },
+    {
+      "group": "Network",
+      "items": [
+        {
+          "task": "Show this machine's IP addresses",
+          "cmd": "ip -br addr",
+          "platforms": [
+            "linux"
+          ]
+        },
+        {
+          "task": "Show the routing table",
+          "cmd": "ip route",
+          "platforms": [
+            "linux"
+          ]
+        },
+        {
+          "task": "List listening ports",
+          "cmd": "sudo ss -tulpn",
+          "platforms": [
+            "linux"
+          ]
+        },
+        {
+          "task": "Check whether a host is reachable",
+          "cmd": "ping -c 4 example.com",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Trace the route to a host",
+          "cmd": "traceroute example.com",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Look up a domain's IP address",
+          "cmd": "dig +short example.com",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Look up a domain's mail servers",
+          "cmd": "dig +short MX example.com",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Show the DNS resolver settings",
+          "cmd": "cat /etc/resolv.conf",
+          "platforms": [
+            "linux"
+          ]
+        },
+        {
+          "task": "See only the response headers from a site",
+          "cmd": "curl -I https://example.com",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Download a file",
+          "cmd": "curl -LO https://example.com/file.tar.gz",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Test whether a port is open",
+          "cmd": "nc -zv example.com 443",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Show your public IP address",
+          "cmd": "curl -s https://ifconfig.me",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Show network connections",
+          "cmd": "nmcli connection show",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "redhat"
+          ]
+        },
+        {
+          "task": "Restart networking",
+          "cmd": "rc-service networking restart",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "alpine"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Firewall",
+      "items": [
+        {
+          "task": "Show the firewall rules",
+          "cmd": "sudo ufw status verbose",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "debian"
+          ]
+        },
+        {
+          "task": "Show the firewall rules",
+          "cmd": "sudo firewall-cmd --list-all",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "redhat"
+          ]
+        },
+        {
+          "task": "Allow SSH through the firewall",
+          "cmd": "sudo ufw allow OpenSSH",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "debian"
+          ]
+        },
+        {
+          "task": "Allow SSH through the firewall",
+          "cmd": "sudo firewall-cmd --permanent --add-service=ssh && sudo firewall-cmd --reload",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "redhat"
+          ]
+        },
+        {
+          "task": "Allow a port",
+          "cmd": "sudo ufw allow 443/tcp",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "debian"
+          ]
+        },
+        {
+          "task": "Allow a port",
+          "cmd": "sudo firewall-cmd --permanent --add-port=443/tcp && sudo firewall-cmd --reload",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "redhat"
+          ]
+        },
+        {
+          "task": "Remove a port rule",
+          "cmd": "sudo ufw delete allow 443/tcp",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "debian"
+          ]
+        },
+        {
+          "task": "Remove a port rule",
+          "cmd": "sudo firewall-cmd --permanent --remove-port=443/tcp && sudo firewall-cmd --reload",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "redhat"
+          ]
+        },
+        {
+          "task": "Turn on the firewall",
+          "cmd": "sudo ufw enable",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "debian"
+          ],
+          "warning": "Allow SSH first if you're connected remotely, or you'll lock yourself out."
+        },
+        {
+          "task": "Turn on the firewall",
+          "cmd": "sudo systemctl enable --now firewalld",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "redhat"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "SSH",
+      "items": [
+        {
+          "task": "Connect to a server",
+          "cmd": "ssh user@host",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Connect on a custom port",
+          "cmd": "ssh -p 2222 user@host",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Run one command on a server",
+          "cmd": "ssh user@host 'uptime'",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Create a new SSH key",
+          "cmd": "ssh-keygen -t ed25519 -C \"label\"",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Copy your key to a server",
+          "cmd": "ssh-copy-id user@host",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Copy a file to a server",
+          "cmd": "scp file.txt user@host:/tmp/",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Copy a file from a server",
+          "cmd": "scp user@host:/var/log/app.log .",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Sync a folder to a server",
+          "cmd": "rsync -avz dist/ user@host:/var/www/site/",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Reach a server's port through SSH",
+          "cmd": "ssh -L 8080:localhost:80 user@host",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Check the SSH server config for errors",
+          "cmd": "sudo sshd -t",
+          "platforms": [
+            "linux"
+          ]
+        },
+        {
+          "task": "Restart the SSH server",
+          "cmd": "sudo systemctl restart ssh",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "debian"
+          ]
+        },
+        {
+          "task": "Restart the SSH server",
+          "cmd": "sudo systemctl restart sshd",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "redhat"
+          ]
+        },
+        {
+          "task": "Restart the SSH server",
+          "cmd": "rc-service sshd restart",
+          "platforms": [
+            "linux"
+          ],
+          "distros": [
+            "alpine"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Archives",
+      "items": [
         {
           "task": "Compress a folder",
           "cmd": "tar -czf backup.tar.gz folder/",
@@ -48,8 +1503,32 @@
           ]
         },
         {
-          "task": "Follow a log file as it grows",
-          "cmd": "tail -f app.log",
+          "task": "Extract a .tar.gz archive into a folder",
+          "cmd": "tar -xzf backup.tar.gz -C /path/to/folder",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "List what is inside a .tar.gz archive",
+          "cmd": "tar -tzf backup.tar.gz",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Create a zip file",
+          "cmd": "zip -r archive.zip folder/",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Extract a zip file",
+          "cmd": "unzip archive.zip",
           "platforms": [
             "linux",
             "macos"
@@ -58,143 +1537,41 @@
       ]
     },
     {
-      "group": "Text",
+      "group": "Scheduled tasks",
       "items": [
         {
-          "task": "Search for text in a folder",
-          "cmd": "grep -rn \"error\" .",
+          "task": "Edit your scheduled tasks",
+          "cmd": "crontab -e",
           "platforms": [
             "linux",
             "macos"
           ]
         },
         {
-          "task": "Replace text in a file",
-          "cmd": "sed -i 's/old/new/g' file.txt",
+          "task": "List your scheduled tasks",
+          "cmd": "crontab -l",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "Run a script every day at 2am (add this line with crontab -e)",
+          "cmd": "0 2 * * * /home/alice/backup.sh",
+          "platforms": [
+            "linux",
+            "macos"
+          ]
+        },
+        {
+          "task": "List scheduled systemd timers",
+          "cmd": "systemctl list-timers",
           "platforms": [
             "linux"
-          ]
-        },
-        {
-          "task": "Count lines in a file",
-          "cmd": "wc -l file.txt",
-          "platforms": [
-            "linux",
-            "macos"
-          ]
-        }
-      ]
-    },
-    {
-      "group": "Network",
-      "items": [
-        {
-          "task": "List listening ports",
-          "cmd": "ss -tulpn",
-          "platforms": [
-            "linux"
-          ]
-        },
-        {
-          "task": "Look up a domain's IP address",
-          "cmd": "dig +short example.com",
-          "platforms": [
-            "linux",
-            "macos"
-          ]
-        },
-        {
-          "task": "See only the response headers from a site",
-          "cmd": "curl -I https://example.com",
-          "platforms": [
-            "linux",
-            "macos"
-          ]
-        },
-        {
-          "task": "Test whether a port is open",
-          "cmd": "nc -zv example.com 443",
-          "platforms": [
-            "linux",
-            "macos"
-          ]
-        },
-        {
-          "task": "Show this machine's IP addresses",
-          "cmd": "ip -br addr",
-          "platforms": [
-            "linux"
-          ]
-        }
-      ]
-    },
-    {
-      "group": "SSH",
-      "items": [
-        {
-          "task": "Create a new SSH key",
-          "cmd": "ssh-keygen -t ed25519 -C \"label\"",
-          "platforms": [
-            "linux",
-            "macos"
-          ]
-        },
-        {
-          "task": "Connect on a custom port",
-          "cmd": "ssh -p 2222 user@host",
-          "platforms": [
-            "linux",
-            "macos"
-          ]
-        },
-        {
-          "task": "Copy your key to a server",
-          "cmd": "ssh-copy-id user@host",
-          "platforms": [
-            "linux",
-            "macos"
-          ]
-        },
-        {
-          "task": "Sync a folder to a server",
-          "cmd": "rsync -avz dist/ user@host:/var/www/site/",
-          "platforms": [
-            "linux",
-            "macos"
-          ]
-        }
-      ]
-    },
-    {
-      "group": "Processes",
-      "items": [
-        {
-          "task": "Find a process by name",
-          "cmd": "pgrep -a nginx",
-          "platforms": [
-            "linux"
-          ]
-        },
-        {
-          "task": "Stop a process by ID",
-          "cmd": "kill 1234",
-          "platforms": [
-            "linux",
-            "macos"
-          ]
-        },
-        {
-          "task": "Check a service's status",
-          "cmd": "systemctl status nginx",
-          "platforms": [
-            "linux"
-          ]
-        },
-        {
-          "task": "Read a service's recent logs",
-          "cmd": "journalctl -u nginx -n 50",
-          "platforms": [
-            "linux"
+          ],
+          "distros": [
+            "debian",
+            "redhat"
           ]
         }
       ]

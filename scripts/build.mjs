@@ -38,19 +38,49 @@ ${guides.map((g) => `<a href="/${g.slug}/"${current === g.slug ? ' aria-current=
 </div>
 </nav>`;
 
-const row = ({ task, cmd, platforms, warning }) => {
-  const names = platforms.map((p) => PLATFORM_NAMES[p]).join(", ");
-  return `<li class="cmd" data-task="${esc(task)}" data-cmd="${esc(cmd)}" data-platforms="${esc(names)}">
-<div class="cmd-head"><span class="task">${esc(task)}</span><small>${esc(names)}</small></div>
-<div class="cmd-line"><code>${esc(cmd)}</code><button type="button" aria-label="Copy command: ${esc(task)}">Copy</button></div>
-${warning ? `<p class="warning">Warning: ${esc(warning)}</p>` : ""}
+const DISTRO_NAMES = { debian: "Debian, Ubuntu", redhat: "Red Hat, Fedora", alpine: "Alpine" };
+const DISTRO_SEARCH = {
+  debian: "debian ubuntu proxmox raspberry pi apt",
+  redhat: "red hat rhel fedora rocky alma centos dnf yum",
+  alpine: "alpine apk",
+};
+const ALL_DISTROS = Object.keys(DISTRO_SEARCH);
+
+const labelOf = ({ platforms, distros }) => distros
+  ? distros.map((d) => DISTRO_NAMES[d]).join(", ")
+  : platforms.map((p) => PLATFORM_NAMES[p]).join(", ");
+const searchOf = (item) => {
+  const distros = item.distros ?? (item.platforms.includes("linux") ? ALL_DISTROS : []);
+  return [labelOf(item), "linux", ...distros.map((d) => DISTRO_SEARCH[d])].join(" ");
+};
+
+// Consecutive commands with the same task are shown together, one line per distro.
+const bundle = (items) => items.reduce((list, item) => {
+  const last = list.at(-1);
+  if (last && last.task === item.task) last.variants.push(item);
+  else list.push({ task: item.task, variants: [item] });
+  return list;
+}, []);
+
+const commandLine = (group, task, item, showLabel) => `<div class="variant" data-cmd="${esc(item.cmd)}" data-search="${esc(`${group} ${task} ${item.cmd} ${searchOf(item)}`)}">
+${showLabel ? `<small class="variant-label">${esc(labelOf(item))}</small>` : ""}
+<div class="cmd-line"><code>${esc(item.cmd)}</code><button type="button" aria-label="Copy command: ${esc(task)}${showLabel ? ` (${esc(labelOf(item))})` : ""}">Copy</button></div>
+</div>`;
+
+const row = (group) => ({ task, variants }) => {
+  const single = variants.length === 1;
+  const warnings = [...new Set(variants.map((v) => v.warning).filter(Boolean))];
+  return `<li class="cmd${single ? "" : " has-variants"}" data-task="${esc(task)}">
+<div class="cmd-head"><span class="task">${esc(task)}</span>${single ? `<small>${esc(labelOf(variants[0]))}</small>` : ""}</div>
+${variants.map((v) => commandLine(group, task, v, !single)).join("\n")}
+${warnings.map((w) => `<p class="warning">Warning: ${esc(w)}</p>`).join("\n")}
 </li>`;
 };
 
 const sections = (guide, heading, idPrefix = "") => guide.groups.map(({ group, items }) => `<section id="${idPrefix}${slugify(group)}">
 <h2>${esc(heading(group))}</h2>
 <ul class="commands">
-${items.map(row).join("\n")}
+${bundle(items).map(row(group)).join("\n")}
 </ul>
 </section>`).join("\n");
 
@@ -115,6 +145,7 @@ ${nav(g.slug)}
 ${g.groups.map(({ group, items }) => `<a href="#${slugify(group)}" data-section="${slugify(group)}"><span>${esc(group)}</span><span>${items.length}</span></a>`).join("\n")}
 </nav>
 <main>
+${g.note ? `<p class="guide-note">${esc(g.note)}</p>` : ""}
 ${sections(g, (group) => group)}
 </main>
 </div>
